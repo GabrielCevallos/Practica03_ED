@@ -1,0 +1,42 @@
+{% extends 'index.html'%}
+
+{% block content %}
+<div class="pagetitle">
+  <h1>Historial de Acciones</h1>
+</div>
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body"><br>
+                    <table class="table">
+                        <thead>
+                            <tr class="table-primary">
+                                <th scope="col">Nro</th>
+                                <th scope="col">Elemento</th>
+                                <th scope="col">Fecha</th>
+                                <th scope="col">Hora</th>
+                                <th scope="col">Acción</th>
+                                <th scope="col">Nro del Elemento</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for historial in historiales %}
+                                <tr>
+                                    <td>{{ historial.numero}}</td>
+                                    <td>{{ historial.clase }}</td>
+                                    <td>{{ historial.fecha }}</td>
+                                    <td>{{ historial.hora }}</td>
+                                    <td>{{ historial.descripcion }}</td>
+                                    <td>{{ historial.idObject }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

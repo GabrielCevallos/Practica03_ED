@@ -1,0 +1,134 @@
+{% extends 'index.html'%}
+
+{% block content %}
+
+{% with messages = get_flashed_messages(with_categories=True) %}
+  {% if messages %}
+    {% for message in messages %}
+      {% if message[0] == 'info' %}
+          <div class="alert alert-primary alert-dismissible fade show" role="alert">
+            <h4 class="alert-heading"><strong>¡Éxito!</strong></h4>
+            <p>{{ message[1]}}</p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+          </div>
+        {% else %}
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <h4 class="alert-heading"><strong>¡Error!</strong></h4>
+            <p>{{ message[1]}}</p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+          </div>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<div class="pagetitle">
+  <h1>Lista de Inversionistas</h1>
+</div>
+<section class="section">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body"><br>
+          <div>
+            <div class="form-inline">
+              <a href="/investor/register" class="btn btn-success rounded-pill">Crear</a>
+              
+              <select class="form-select" style="width: 150px;" id="atributo">
+                <option value="nombre">Nombre</option>
+                <option value="apellido">Apellido</option>
+                <option value="dni">Identificación</option>
+              </select>
+              
+              <input class="form-control" style="width: 150px;" id="texto" type="text">
+              <i class="bx bx-search-alt" id="btn" title="Buscar"></i>
+
+              <select class="form-select" style="width: 150px;" name="sortMethod" id="sortMethod">
+                <option value="0">Quick Sort</option> 
+                <option value="1">Merge Sort</option>
+                <option value="2">Shell Sort</option>
+              </select>
+            
+              <a hidden href="#" id="sortA"></a> 
+            </div>
+            <table class="table">
+              <thead>
+                <tr class="table-success">
+                  <th scope="col">Nro</th>
+                  <th scope="col">Nombre
+                    <span onclick="sortFunct('nombre','1')">🡡</span> 
+                    <span onclick="sortFunct('nombre','0')">🡫</span>
+                  </th>
+                  <th scope="col">Apellido
+                    <span onclick="sortFunct('apellido','1')">🡡</span> 
+                    <span onclick="sortFunct('apellido','0')">🡫</span>
+                  </th>
+                  <th scope="col">Identificación</th>
+                  <th scope="col">Tipo de<br>Identificación
+                    <span onclick="sortFunct('tipo','1')">🡡</span> 
+                    <span onclick="sortFunct('tipo','0')">🡫</span>
+                  </th>
+                  <th scope="col">Dirección
+                    <span onclick="sortFunct('direccion','1')">🡡</span> 
+                    <span onclick="sortFunct('direccion','0')">🡫</span>
+                  </th>
+                  <th scope="col">Capital Invertido
+                    <span onclick="sortFunct('capitalInvertido','1')">🡡</span> 
+                    <span onclick="sortFunct('capitalInvertido','0')">🡫</span>
+                  </th>
+                  <th scope="col">Acciones</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for inversionista in inversionistas %}
+                  <tr>
+                    <td>{{ inversionista.numero}}</td>
+                    <td>{{ inversionista.nombre }}</td>
+                    <td>{{ inversionista.apellido }}</td>
+                    <td>{{ inversionista.dni }}</td>
+                    <td>{{ inversionista.tipo }}</td>
+                    <td>{{ inversionista.direccion }}</td>
+                    <td>{{ inversionista.capitalInvertido }}</td>
+                    <td>
+                      <a href="/investor/edit/{{ inversionista.id }}" class="btn btn-info rounded-pill">Modificar</a>
+                      <a href="/investor/delete/{{ inversionista.id }}" class="btn btn-danger rounded-pill">Eliminar</a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<a id="search" href="investor/list"></a>
+<script>
+  const sortUrl = '/investor/sort'
+  function sortFunct(attr,ord) {
+    const newHref = `${sortUrl}/${attr}/${ord}/${$('#sortMethod').val()}`;
+    $('#sortA').attr('href',newHref) 
+    console.log($('#sortA').attr('href'))
+    $('#sortA')[0].click()
+  }
+  $(document).ready(function () {
+    $("#btn").click(function () {
+      search();
+    });
+    function search() {
+      var texto = $("#texto").val();
+      var atributo = $("#atributo").val();
+      if (texto == "") {
+        alert("Ingrese un valor");
+        return;
+      } else {
+        $("#search").attr("href", "/investor/search/" + atributo + "/" + texto);
+        $("#search")[0].click();
+      }
+    }
+  });
+</script>
+{% endblock %}
