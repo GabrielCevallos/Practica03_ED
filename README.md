@@ -8,13 +8,19 @@ DIRECTORIO CÓDIGO PYTHON:
 "Front"
 
 *COMANDOS EN LINUX PARA VISUALIZAR EL SISTEMA:
+
 source virtual/bin/activate
+
 pip install flask requests
+
 python index.py
+
 
 DIRECTORIO CÓDIGO JAVA:
 "SistemaGestionProyectosEnergia"
 
 *COMANDOS EN LINUX PARA LEVANTAR EL SERVIDOR:
+
 mvn clean compile
+
 mvn exec:java
