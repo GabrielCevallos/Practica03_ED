@@ -306,90 +306,81 @@ public class LinkedList<E> {
         return null;
     }
 
-    //BUSCAR POR ATRIBUTO
+    
     public LinkedList<E> buscarPorAtributo(String attribute, Object x) throws Exception {
         LinkedList<E> list = new LinkedList<>();
-        if(isEmpty()) return list; //Si la lista esta vacia, retornarla
-        E[] array = this.toArray(); //Convertir la lista a un arreglo
-        for(int i = 0; i < array.length; i++) { //Recorrer arreglo
+        if(isEmpty()) return list; 
+        E[] array = this.toArray(); 
+        for(int i = 0; i < array.length; i++) { 
             if(compararObjetos(exist_attribute(array[i], attribute), x)) {
-                list.add(array[i]); //Si se encuentra, se agrega a la lista
+                list.add(array[i]); 
             }
         }
-        return list; //Lista de elementos encontrados
+        return list; 
     }
 
-    /*
-     * QUICK SORT
-     * DIVIDIR EL ARREGLO EN MENORES QUE EL PIVOTE Y MAYORES
-     */
+    //QUICK SORT
     private Integer particionArray(String attribute, E[] arr, Integer elementoMenor, Integer elementoMayor, Integer tipoOrden) throws Exception {
-        E pivot = arr[elementoMayor]; // El pivote es el ultimo elemento
+        E pivot = arr[elementoMayor]; 
         Integer j = elementoMenor - 1;
-        // Recorrer el arreglo
         for (int i = elementoMenor; i <= elementoMayor - 1; i++) {
             if (atrribute_compare(attribute, arr[i], pivot, tipoOrden)) {
                 j++;
-                // Intercambiar el elemento con el de la derecha del menor
                 intercambio(arr, j, i);
             }
         }
-        intercambio(arr, j + 1, elementoMayor); // Pivote en la posicion final
+        intercambio(arr, j + 1, elementoMayor); 
         return j + 1;
     }
 
-    // INTERCAMBIO DE POSICIONES DEL PAR DE ELEMENTOS DEL ARREGLO
+   
     private void intercambio(E[] arr, Integer i, Integer j) {
         E x = arr[i];
         arr[i] = arr[j];
         arr[j] = x;
     }
 
-    // METODO EN ARREGLO
+   
     private void quickSort(String attribute, E[] arr, Integer elementoMenor, Integer elementoMayor, Integer tipoOrden) throws Exception {
         if (elementoMenor < elementoMayor) {
             int posPivot = particionArray(attribute, arr, elementoMenor, elementoMayor, tipoOrden);
-            // Recursividad
-            quickSort(attribute, arr, elementoMenor, posPivot - 1, tipoOrden); // Ordenar subarray izquierda
-            quickSort(attribute, arr, posPivot + 1, elementoMayor, tipoOrden); // Ordenar subarray derecha
+            quickSort(attribute, arr, elementoMenor, posPivot - 1, tipoOrden); 
+            quickSort(attribute, arr, posPivot + 1, elementoMayor, tipoOrden); 
         }
     }
 
-    // METODO EN LISTA
+  
     public LinkedList<E> quickSort(String attribute, Integer tipoOrden) throws Exception {
-        if (isEmpty()) return this; // Si la lista esta vacia, retornar la lista
-        E[] arr = this.toArray(); // Convertir la lista a un arreglo
+        if (isEmpty()) return this; 
+        E[] arr = this.toArray(); 
         final Integer elementoMayor = arr.length - 1;
         final Integer elementoMenor = 0;
-        quickSort(attribute, arr, elementoMenor, elementoMayor, tipoOrden); // Ordenar
-        return this.toList(arr); // Convertir arreglo a lista
+        quickSort(attribute, arr, elementoMenor, elementoMayor, tipoOrden); 
+        return this.toList(arr); 
     }
 
-    /*
-     * MERGE SORT
-     * MEZCLAR LOS ELEMENTOS DE AMBOS ARREGLOS
-     */
+    //MERGE SORT
     private void merge(String atribute, E arr[], int left, int middle, int right, Integer tipoOrden) throws Exception {
-        Class<?> classs = this.header.getInfo().getClass(); // Obtener la clase del objeto
-        // Tamaño de los subarrays
-        int n1 = middle - left + 1; // Size subarray izquierdo
-        int n2 = right - middle; // Size subarray derecho
+        Class<?> classs = this.header.getInfo().getClass(); 
+        
+        int n1 = middle - left + 1; 
+        int n2 = right - middle; 
         @SuppressWarnings("unchecked")
-        E ArrayLeft[] = (E[]) Array.newInstance(classs, n1); // Subarray izquierda
+        E ArrayLeft[] = (E[]) Array.newInstance(classs, n1); 
         @SuppressWarnings("unchecked")
-        E ArrayRight[] = (E[]) Array.newInstance(classs, n2); // Subarray derecha
-        // Copiar los elementos en el subarray izquierdo
+        E ArrayRight[] = (E[]) Array.newInstance(classs, n2);
+     
         for (int i = 0; i < n1; ++i) {
             ArrayLeft[i] = arr[left + i];
         }
-        // Copiar los elementos en el subarray derecho
+      
         for (int j = 0; j < n2; ++j) {
             ArrayRight[j] = arr[middle + 1 + j];
         }
         int i = 0, j = 0;
-        // Indice del subarray izquierdo
+        
         int k = left;
-        // Mezclar los subarrays
+
         while (i < n1 && j < n2) {
             if (atrribute_compare(atribute, ArrayLeft[i], ArrayRight[j], tipoOrden)) {
                 arr[k] = ArrayLeft[i];
@@ -400,13 +391,13 @@ public class LinkedList<E> {
             }
             k++;
         }
-        // Copiar los elementos restantes del subarray izquierdo
+
         while (i < n1) {
             arr[k] = ArrayLeft[i];
             i++;
             k++;
         }
-        // Copiar los elementos restantes del subarray derecho
+
         while (j < n2) {
             arr[k] = ArrayRight[j];
             j++;
@@ -414,41 +405,34 @@ public class LinkedList<E> {
         }
     }
 
-    // METODO EN ARREGLO
+
     private void mergeSort(String attribute, E arr[], int left, int right, Integer tipoOrden) throws Exception {
         if (left < right) {
-            int middle = left + (right - left) / 2; // Obtener el punto medio
-            // Recursividad
-            mergeSort(attribute, arr, left, middle, tipoOrden); // Ordenar subarray izquierda
-            mergeSort(attribute, arr, middle + 1, right, tipoOrden); // Ordenar subarray derecha
-            merge(attribute, arr, left, middle, right, tipoOrden); // Mezclar subarrays
+            int middle = left + (right - left) / 2; 
+            mergeSort(attribute, arr, left, middle, tipoOrden); 
+            mergeSort(attribute, arr, middle + 1, right, tipoOrden); 
+            merge(attribute, arr, left, middle, right, tipoOrden); 
         }
     }
 
-    // METODO EN LISTA
+
     public LinkedList<E> mergeSort(String attribute, Integer tipoOrden) throws Exception {
-        if (isEmpty()) return this; // Si la lista esta vacia, retornar la lista
-        E[] array = this.toArray(); // Convertir la lista a un arreglo
+        if (isEmpty()) return this; 
+        E[] array = this.toArray(); 
         final Integer left = 0;
         final Integer right = array.length - 1;
-        mergeSort(attribute, array, left, right, tipoOrden); // Ordenar
+        mergeSort(attribute, array, left, right, tipoOrden); 
         reset();
-        return this.toList(array); // Convertir arreglo a lista
+        return this.toList(array); 
     }
 
-    /*
-     * SHELL SORT
-     * METODO EN ARREGLO
-     */
+    //SHELL SORT
     private int shellSort(String attribute, E[] arr, Integer tipoOrden) throws Exception {
-        int longitud = arr.length;
-        // Determinar el espacio y dividirlo
-        for (int espacio = longitud / 2; espacio > 0; espacio /= 2) {
-            // Recorrer el arreglo
+        int longitud = arr.length;   
+        for (int espacio = longitud / 2; espacio > 0; espacio /= 2) {         
             for (int i = espacio; i < longitud; i += 1) {
                 E temp = arr[i];
-                int j;
-                // Comparar los elementos y moverlos a su posicion correcta
+                int j;        
                 for (j = i; j >= espacio
                         && !atrribute_compare(attribute, arr[j - espacio], temp, tipoOrden); j -= espacio)
                     arr[j] = arr[j - espacio];
@@ -458,39 +442,37 @@ public class LinkedList<E> {
         return 0;
     }
 
-    // METODO EN LISTA
+
     public LinkedList<E> shellSort(String attribute, Integer tipoOrden) throws Exception {
         if (isEmpty())
-            return this; // Si la lista esta vacia, retornar la lista
-        E[] array = this.toArray(); // Convertir la lista a un arreglo
-        shellSort(attribute, array, tipoOrden); // Ordenar
-        return this.toList(array); // Convertir arreglo a lista
+            return this; 
+        E[] array = this.toArray(); 
+        shellSort(attribute, array, tipoOrden); 
+        return this.toList(array); 
     }
 
-    /*
-     * BUSQUEDA LINEAL BINARIA
-     */
+    //BUSQUEDA LINEAL BINARIA
     public LinkedList<E> busquedaLinealBinaria(String attribute, Object x) {
-        if(isEmpty()) return new LinkedList<>(); //Si esta vacia retornar una lista vacia
+        if(isEmpty()) return new LinkedList<>(); 
         try {
-            this.mergeSort(attribute, 1); //Ordenar la lista
-            Integer indice = getIndice(attribute, x); //Indice del objeto a buscar
+            this.mergeSort(attribute, 1); 
+            Integer indice = getIndice(attribute, x); 
             Integer i = indice.intValue(); 
             E objeto = get(indice); 
-            E[] arr = this.toArray(); //Convertir a array
+            E[] arr = this.toArray(); 
             LinkedList<E> lista = new LinkedList<>();
-            //Busqueda hacia la izquierda
+       
             while(indice >= 0 && compararObjetos(exist_attribute(arr[indice], attribute),exist_attribute(objeto, attribute))) {
                 lista.add(arr[indice]);
                 indice--;
             }
             indice = i+1;
-            //Busqueda hacia la derecha
+     
             while(indice < this.size && compararObjetos(exist_attribute(arr[indice], attribute),exist_attribute(objeto, attribute))) {
                 lista.add(arr[indice]);
                 indice++;
             }
-            return lista;   //Retornar la lista con los elementos que coinciden
+            return lista;  
         } catch (Exception e) {
             e.printStackTrace();
             return new LinkedList<>();
@@ -498,42 +480,36 @@ public class LinkedList<E> {
     }
 
 
-    /*
-     * BUSQUEDA BINARIA
-     * METODO EN ARREGLO
-     */
+    //BUSQUEDA BINARIA
     private int busquedaBinaria(E arr[], Object x, String attribute) throws Exception {
-        //Punteros
         int elementMenor = 0, elementMayor = arr.length - 1;
-        // Recorrer el arreglo
         while (elementMenor <= elementMayor) {
             int mid = elementMenor + (elementMayor - elementMenor) / 2;
-            if (exist_attribute(arr[mid], attribute).equals(x)) return mid; //Elemento en la mitad
+            if (exist_attribute(arr[mid], attribute).equals(x)) return mid; 
             if (compare(exist_attribute(arr[mid], attribute), x, 1)) {
-                elementMenor = mid + 1; //Buscar en la derecha del array
+                elementMenor = mid + 1; 
             } else {
-                elementMayor = mid - 1; //Buscar en la izquierda del array
+                elementMayor = mid - 1; 
             }
         }
-        return -1; //No se encontro el elemento
+        return -1; 
     }
 
-    // METODO EN LISTA
+    
     public E busquedaBinaria(String attribute, Object x) throws Exception {
-        if (isEmpty()) return null; // Si la lista esta vacia, retornar null
+        if (isEmpty()) return null; 
         try{
-            E[] arr = this.toArray(); // Convertir la lista a un arreglo
-            return arr[busquedaBinaria(arr, x, attribute)]; // Retornar el valor encontrado
+            E[] arr = this.toArray(); 
+            return arr[busquedaBinaria(arr, x, attribute)]; 
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Objeto no encontrado");
         }
     }
 
-    //OBTENER INDICE DE UN OBJETO EN LA LISTA
     public Integer getIndice(String attribute, Object x) throws Exception {
-        if (isEmpty()) return -1; // Si la lista esta vacia, retornar -1
-        E[] arr = this.toArray(); // Convertir la lista a un arreglo
-        return busquedaBinaria(arr, x, attribute); // Retornar el indice del valor encontrado
+        if (isEmpty()) return -1; 
+        E[] arr = this.toArray(); 
+        return busquedaBinaria(arr, x, attribute); 
     }
 }
